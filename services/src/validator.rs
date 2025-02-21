@@ -431,8 +431,20 @@ impl Validator for Zebrad {
         }
 
         let cache_dir = if let Some(cache) = config.chain_cache.clone() {
-            Self::load_chain(cache.clone(), data_dir.path().to_path_buf(), config.network);
-            cache
+            println!("creating temp dir to copy cache into");
+            // create temp dir to copy the cache into
+            let temp_dir = TempDir::new().expect("temp_dir to be created");
+
+            copy_dir_all(cache.clone(), &temp_dir.path()).expect("cache to be copied");
+
+            Self::load_chain(
+                temp_dir.path().to_path_buf(),
+                data_dir.path().to_path_buf(),
+                config.network,
+            );
+            let cache_dir = temp_dir.path().to_path_buf();
+            dbg!(&cache_dir);
+            cache_dir
         } else {
             data_dir.path().to_path_buf()
         };
@@ -629,4 +641,21 @@ impl Drop for Zebrad {
     fn drop(&mut self) {
         self.stop();
     }
+}
+
+use std::path::Path;
+use std::{fs, io};
+
+fn copy_dir_all(src: impl AsRef<Path>, dst: impl AsRef<Path>) -> io::Result<()> {
+    fs::create_dir_all(&dst)?;
+    for entry in fs::read_dir(src)? {
+        let entry = entry?;
+        let ty = entry.file_type()?;
+        if ty.is_dir() {
+            copy_dir_all(entry.path(), dst.as_ref().join(entry.file_name()))?;
+        } else {
+            fs::copy(entry.path(), dst.as_ref().join(entry.file_name()))?;
+        }
+    }
+    Ok(())
 }
