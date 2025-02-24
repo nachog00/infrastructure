@@ -9,7 +9,7 @@ github = { repository = "zingolabs/infrastructure/testutils" }
 
 [dependencies]
 # Local
-zingo-infra-services = { path = "../services" }
+zingo-infra-services = { workspace = true }
 # Zingo
 zingo-netutils = { workspace = true }
 zingolib = { workspace = true, features = ["test-elevation"] }

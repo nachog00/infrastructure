@@ -9,7 +9,7 @@ github = { repository = "zingolabs/infrastructure/services" }
 
 [dependencies]
 # Local
-zingo-infra-fetcher-core = { path = "../fetcher-core" }
+zingo-infra-fetcher-core = { workspace = true }
 # Zcash
 zcash_primitives = { workspace = true }
 zcash_protocol = { workspace = true }
