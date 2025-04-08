@@ -378,7 +378,7 @@ pub async fn get_latest_block(
         .await
         .unwrap();
     let request = tonic::Request::new(proto::service::ChainSpec {});
-    let lwd_response = lwd_client
+    let mut lwd_response = lwd_client
         .get_latest_block(request)
         .await
         .unwrap()
@@ -389,6 +389,9 @@ pub async fn get_latest_block(
     println!("\nZainod response:");
     println!("block id: {:?}", zainod_response);
 
+    // lwd blockid hash is (wrongly) reversed
+    // this adjustment provides the correct value to test against
+    lwd_response.hash.reverse();
     println!("\nLightwalletd response:");
     println!("block id: {:?}", lwd_response);
 
