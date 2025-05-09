@@ -12,8 +12,8 @@ use portpicker::Port;
 use tempfile::TempDir;
 use zebra_chain::{parameters::NetworkUpgrade, serialization::ZcashSerialize as _};
 use zebra_node_services::rpc_client::RpcRequestClient;
-use zebra_rpc::methods::get_block_template_rpcs::get_block_template::{
-    proposal::TimeSource, proposal_block_from_template, GetBlockTemplate,
+use zebra_rpc::methods::types::get_block_template::{
+    proposal::proposal_block_from_template, GetBlockTemplate, TimeSource,
 };
 
 use crate::{

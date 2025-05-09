@@ -15,7 +15,7 @@ zcash_primitives = { workspace = true }
 zcash_protocol = { workspace = true }
 # Zebra
 zebra-node-services = { workspace = true }
-zebra-rpc = { workspace = true, features = ["getblocktemplate-rpcs"] }
+zebra-rpc = { workspace = true }
 zebra-chain = { workspace = true }
 # Community
 tempfile = { workspace = true }
