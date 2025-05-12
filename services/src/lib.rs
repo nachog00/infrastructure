@@ -35,7 +35,6 @@
 //! The `test_fixtures` feature is enabled by default to allow tests to run.
 //!
 
-/// The pub interface
 pub mod config;
 pub mod error;
 pub mod indexer;

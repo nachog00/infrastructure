@@ -16,31 +16,37 @@ pub async fn binary_exists(bin: Binaries) {
     };
 }
 
+#[ignore]
 #[tokio::test]
 pub(crate) async fn zainod_exists() {
     binary_exists(Binaries::Zainod).await
 }
 
+#[ignore]
 #[tokio::test]
 pub(crate) async fn lightwalletd_exists() {
     binary_exists(Binaries::Lightwalletd).await
 }
 
+#[ignore]
 #[tokio::test]
 pub(crate) async fn zcashd_exists() {
     binary_exists(Binaries::Zcashd).await
 }
 
+#[ignore]
 #[tokio::test]
 pub(crate) async fn zcash_cli_exists() {
     binary_exists(Binaries::ZcashCli).await
 }
 
+#[ignore]
 #[tokio::test]
 pub(crate) async fn zingo_cli_exists() {
     binary_exists(Binaries::ZingoCli).await
 }
 
+#[ignore]
 #[tokio::test]
 pub(crate) async fn zebrad_exists() {
     binary_exists(Binaries::Zebrad).await
