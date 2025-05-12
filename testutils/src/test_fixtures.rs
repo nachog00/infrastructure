@@ -122,7 +122,7 @@ pub async fn generate_zcashd_chain_cache(
     // faucet taddr child index 0:
     // tmBsTi2xWTjUdEXnuTceL7fecEQKeWaPDJd
 
-    faucet.sync().await.unwrap();
+    faucet.sync_and_await().await.unwrap();
     from_inputs::quick_send(
         &mut faucet,
         vec![(
@@ -155,11 +155,11 @@ pub async fn generate_zcashd_chain_cache(
     .unwrap();
     local_net.validator().generate_blocks(1).await.unwrap();
 
-    recipient.sync().await.unwrap();
+    recipient.sync_and_await().await.unwrap();
     recipient.quick_shield().await.unwrap();
     local_net.validator().generate_blocks(1).await.unwrap();
 
-    faucet.sync().await.unwrap();
+    faucet.sync_and_await().await.unwrap();
     from_inputs::quick_send(
         &mut faucet,
         vec![(
@@ -172,7 +172,7 @@ pub async fn generate_zcashd_chain_cache(
     .unwrap();
     local_net.validator().generate_blocks(1).await.unwrap();
 
-    recipient.sync().await.unwrap();
+    recipient.sync_and_await().await.unwrap();
     from_inputs::quick_send(
         &mut recipient,
         vec![(
@@ -185,7 +185,7 @@ pub async fn generate_zcashd_chain_cache(
     .unwrap();
     local_net.validator().generate_blocks(1).await.unwrap();
 
-    recipient.sync().await.unwrap();
+    recipient.sync_and_await().await.unwrap();
     let recipient_ua = get_base_address(&recipient, PoolType::ORCHARD).await;
     from_inputs::quick_send(
         &mut recipient,
@@ -195,7 +195,7 @@ pub async fn generate_zcashd_chain_cache(
     .unwrap();
     local_net.validator().generate_blocks(2).await.unwrap();
 
-    faucet.sync().await.unwrap();
+    faucet.sync_and_await().await.unwrap();
     from_inputs::quick_send(
         &mut faucet,
         vec![(
@@ -1214,7 +1214,7 @@ pub async fn get_transaction(
     let lightclient_dir = tempfile::tempdir().unwrap();
     let (mut faucet, recipient) =
         client::build_lightclients(lightclient_dir.path().to_path_buf(), lightwalletd.port());
-    faucet.sync().await.unwrap();
+    faucet.sync_and_await().await.unwrap();
     let recipient_ua = get_base_address(&recipient, PoolType::ORCHARD).await;
     let txids = from_inputs::quick_send(&mut faucet, vec![(&recipient_ua, 100_000, None)])
         .await
@@ -1297,7 +1297,7 @@ pub async fn send_transaction(
         lightclient_dir.path().to_path_buf(),
         local_net.indexer().port(),
     );
-    faucet.sync().await.unwrap();
+    faucet.sync_and_await().await.unwrap();
     let txids = from_inputs::quick_send(
         &mut faucet,
         vec![(
@@ -1359,7 +1359,7 @@ pub async fn send_transaction(
         lightclient_dir.path().to_path_buf(),
         local_net.indexer().port(),
     );
-    faucet.sync().await.unwrap();
+    faucet.sync_and_await().await.unwrap();
     let recipient_ua = get_base_address(&recipient, PoolType::ORCHARD).await;
     let txids = from_inputs::quick_send(&mut faucet, vec![(&recipient_ua, 100_000, None)])
         .await
@@ -1954,7 +1954,7 @@ pub async fn get_mempool_tx(
     let (mut faucet, mut recipient) =
         client::build_lightclients(lightclient_dir.path().to_path_buf(), lightwalletd.port());
 
-    faucet.sync().await.unwrap();
+    faucet.sync_and_await().await.unwrap();
     let txids_1 = from_inputs::quick_send(
         &mut faucet,
         vec![(
@@ -1978,7 +1978,7 @@ pub async fn get_mempool_tx(
 
     tokio::time::sleep(std::time::Duration::from_secs(1)).await;
 
-    recipient.sync().await.unwrap();
+    recipient.sync_and_await().await.unwrap();
     let txids_3 = from_inputs::quick_send(
         &mut recipient,
         vec![(
@@ -2102,7 +2102,7 @@ pub async fn get_mempool_stream_zingolib_mempool_monitor(
     let (mut faucet, mut recipient) =
         client::build_lightclients(lightclient_dir.path().to_path_buf(), lightwalletd.port());
 
-    faucet.sync().await.unwrap();
+    faucet.sync_and_await().await.unwrap();
     let _txids_1 = from_inputs::quick_send(
         &mut faucet,
         vec![(
@@ -2126,7 +2126,7 @@ pub async fn get_mempool_stream_zingolib_mempool_monitor(
 
     tokio::time::sleep(std::time::Duration::from_secs(1)).await;
 
-    recipient.sync().await.unwrap();
+    recipient.sync_and_await().await.unwrap();
     let _txids_3 = from_inputs::quick_send(
         &mut recipient,
         vec![(
@@ -2160,11 +2160,11 @@ pub async fn get_mempool_stream_zingolib_mempool_monitor(
 
     tokio::time::sleep(std::time::Duration::from_secs(1)).await;
 
-    recipient.sync().await.unwrap();
+    recipient.sync_and_await().await.unwrap();
 
     tokio::time::sleep(std::time::Duration::from_secs(1)).await;
 
-    recipient.sync().await.unwrap();
+    recipient.sync_and_await().await.unwrap();
     tokio::time::sleep(std::time::Duration::from_secs(5)).await;
     let zainod_tx_summaries = recipient.transaction_summaries().await.unwrap();
     println!("Zainod Transactions:\n{}", zainod_tx_summaries);
@@ -2181,11 +2181,11 @@ pub async fn get_mempool_stream_zingolib_mempool_monitor(
 
     tokio::time::sleep(std::time::Duration::from_secs(1)).await;
 
-    recipient.sync().await.unwrap();
+    recipient.sync_and_await().await.unwrap();
 
     tokio::time::sleep(std::time::Duration::from_secs(1)).await;
 
-    recipient.sync().await.unwrap();
+    recipient.sync_and_await().await.unwrap();
     tokio::time::sleep(std::time::Duration::from_secs(5)).await;
     let lwd_tx_summaries = recipient.transaction_summaries().await.unwrap();
     println!("Lightwalletd Transactions:\n{}", lwd_tx_summaries);
@@ -2344,7 +2344,7 @@ pub async fn get_mempool_stream(
     let (mut faucet, mut recipient) =
         client::build_lightclients(lightclient_dir.path().to_path_buf(), lightwalletd.port());
 
-    faucet.sync().await.unwrap();
+    faucet.sync_and_await().await.unwrap();
     let txids_1 = from_inputs::quick_send(
         &mut faucet,
         vec![(
@@ -2430,7 +2430,7 @@ pub async fn get_mempool_stream(
     tokio::time::sleep(std::time::Duration::from_secs(1)).await;
 
     // send more txs to mempool
-    recipient.sync().await.unwrap();
+    recipient.sync_and_await().await.unwrap();
     let txids_3 = from_inputs::quick_send(
         &mut recipient,
         vec![(
@@ -2524,7 +2524,7 @@ pub async fn get_mempool_stream(
 
     tokio::time::sleep(std::time::Duration::from_secs(1)).await;
 
-    recipient.sync().await.unwrap();
+    recipient.sync_and_await().await.unwrap();
     tokio::time::sleep(std::time::Duration::from_secs(5)).await;
     let zainod_tx_summaries = recipient.transaction_summaries().await.unwrap();
     println!("Zainod Transactions:\n{}\n", zainod_tx_summaries);
@@ -2541,7 +2541,7 @@ pub async fn get_mempool_stream(
 
     tokio::time::sleep(std::time::Duration::from_secs(1)).await;
 
-    recipient.sync().await.unwrap();
+    recipient.sync_and_await().await.unwrap();
     tokio::time::sleep(std::time::Duration::from_secs(5)).await;
     let lwd_tx_summaries = recipient.transaction_summaries().await.unwrap();
     println!("Lightwalletd Transactions:\n{}\n", lwd_tx_summaries);
