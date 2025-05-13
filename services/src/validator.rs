@@ -12,9 +12,8 @@ use portpicker::Port;
 use tempfile::TempDir;
 use zebra_chain::{parameters::NetworkUpgrade, serialization::ZcashSerialize as _};
 use zebra_node_services::rpc_client::RpcRequestClient;
-use zebra_rpc::methods::get_block_template_rpcs::{
-    get_block_template::proposal::TimeSource,
-    types::get_block_template::{proposal::proposal_block_from_template, GetBlockTemplate},
+use zebra_rpc::methods::get_block_template_rpcs::get_block_template::{
+    proposal::TimeSource, proposal_block_from_template, GetBlockTemplate,
 };
 
 use crate::{
@@ -276,7 +275,13 @@ impl Validator for Zcashd {
             .stdout(std::process::Stdio::piped())
             .stderr(std::process::Stdio::piped());
 
-        let mut handle = command.spawn().unwrap();
+        let mut handle = command.spawn().expect(&format!(
+            "{} {}",
+            command.get_program().to_string_lossy(),
+            command
+                .get_args()
+                .fold("".to_string(), |args, arg| args + &arg.to_string_lossy())
+        ));
 
         logs::write_logs(&mut handle, &logs_dir);
         launch::wait(
