@@ -2,6 +2,7 @@
 
 use portpicker::Port;
 use zcash_primitives::consensus::BlockHeight;
+use zcash_protocol::consensus::NetworkUpgrade;
 
 pub(crate) const LOCALHOST_IPV4: &str = "http://127.0.0.1";
 
@@ -55,6 +56,21 @@ impl Default for ActivationHeights {
             canopy: 1.into(),
             nu5: 1.into(),
             nu6: 1.into(),
+        }
+    }
+}
+
+impl ActivationHeights {
+    /// Returns activation height for given `network_upgrade`.
+    pub fn activation_height(&self, network_upgrade: NetworkUpgrade) -> BlockHeight {
+        match network_upgrade {
+            NetworkUpgrade::Overwinter => self.overwinter,
+            NetworkUpgrade::Sapling => self.sapling,
+            NetworkUpgrade::Blossom => self.blossom,
+            NetworkUpgrade::Heartwood => self.heartwood,
+            NetworkUpgrade::Canopy => self.canopy,
+            NetworkUpgrade::Nu5 => self.nu5,
+            NetworkUpgrade::Nu6 => self.nu6,
         }
     }
 }
