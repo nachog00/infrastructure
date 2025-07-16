@@ -212,6 +212,7 @@ pub struct Zcashd {
     /// Zcash cli binary location
     zcash_cli_bin: Option<PathBuf>,
     /// Network upgrade activation heights
+    #[getset(skip)]
     activation_heights: network::ActivationHeights,
 }
 
@@ -423,6 +424,7 @@ pub struct Zebrad {
     /// Data directory
     data_dir: TempDir,
     /// Network upgrade activation heights
+    #[getset(skip)]
     activation_heights: network::ActivationHeights,
     /// RPC request client
     client: RpcRequestClient,
