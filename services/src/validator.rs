@@ -20,7 +20,7 @@ use crate::{
     config,
     error::LaunchError,
     launch, logs,
-    network::{self, Network},
+    network::{self, ActivationHeights, Network},
     Process,
 };
 
@@ -107,6 +107,9 @@ pub trait Validator: Sized {
 
     /// Validator config struct
     type Config;
+
+    /// Return activation heights
+    fn activation_heights(&self) -> ActivationHeights;
 
     /// Launch the process.
     fn launch(
@@ -235,6 +238,10 @@ impl Validator for Zcashd {
 
     type Config = ZcashdConfig;
 
+    fn activation_heights(&self) -> ActivationHeights {
+        self.activation_heights
+    }
+
     async fn launch(config: Self::Config) -> Result<Self, LaunchError> {
         let logs_dir = tempfile::tempdir().unwrap();
         let data_dir = tempfile::tempdir().unwrap();
@@ -275,7 +282,7 @@ impl Validator for Zcashd {
             .stdout(std::process::Stdio::piped())
             .stderr(std::process::Stdio::piped());
 
-        let mut handle = command.spawn().expect(&format!(
+        let mut handle = command.spawn().unwrap_or_else(|_| panic!(
             "{} {}",
             command.get_program().to_string_lossy(),
             command
@@ -427,6 +434,10 @@ impl Validator for Zebrad {
     const CONFIG_FILENAME: &str = config::ZEBRAD_FILENAME;
 
     type Config = ZebradConfig;
+
+    fn activation_heights(&self) -> ActivationHeights {
+        self.activation_heights
+    }
 
     async fn launch(config: Self::Config) -> Result<Self, LaunchError> {
         let logs_dir = tempfile::tempdir().unwrap();
