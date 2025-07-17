@@ -15,6 +15,7 @@ use zebra_node_services::rpc_client::RpcRequestClient;
 use zebra_rpc::methods::get_block_template_rpcs::get_block_template::{
     proposal::TimeSource, proposal_block_from_template, GetBlockTemplate,
 };
+use zebrad::config::ZebradConfig;
 
 use crate::{
     config,
@@ -69,7 +70,7 @@ pub struct ZcashdConfig {
 ///
 /// `network` can be used for testing against cached testnet / mainnet chains where large chains are needed.
 /// `activation_heights` and `miner_address` will be ignored while not using regtest network.
-pub struct ZebradConfig {
+pub struct ZebradProcessConfig {
     /// Zebrad binary location
     pub zebrad_bin: Option<PathBuf>,
     /// Zebrad network listen port
@@ -84,9 +85,11 @@ pub struct ZebradConfig {
     pub chain_cache: Option<PathBuf>,
     /// Network type
     pub network: Network,
+    /// Original ZebradConfig
+    pub config_object: ZebradConfig,
 }
 
-impl Default for ZebradConfig {
+impl Default for ZebradProcessConfig {
     fn default() -> Self {
         Self {
             zebrad_bin: None,
@@ -96,6 +99,27 @@ impl Default for ZebradConfig {
             miner_address: ZEBRAD_DEFAULT_MINER,
             chain_cache: None,
             network: Network::Regtest,
+            config_object: ZebradConfig {
+                consensus: Default::default(),
+                metrics: Default::default(),
+                network: zebra_network::Config {
+                    listen_addr: todo!(),
+                    external_addr: todo!(),
+                    network: todo!(),
+                    initial_mainnet_peers: todo!(),
+                    initial_testnet_peers: todo!(),
+                    cache_dir: todo!(),
+                    peerset_initial_target_size: todo!(),
+                    crawl_new_peer_interval: todo!(),
+                    max_connections_per_ip: todo!(),
+                },
+                state: todo!(),
+                tracing: todo!(),
+                sync: todo!(),
+                mempool: todo!(),
+                rpc: todo!(),
+                mining: todo!(),
+            },
         }
     }
 }

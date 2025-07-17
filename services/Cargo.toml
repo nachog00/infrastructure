@@ -27,6 +27,7 @@ getset = { workspace = true }
 json = { workspace = true }
 serde_json = { workspace = true }
 hex = { workspace = true }
+zebra-network = {workspace = true }
 
 [build-dependencies]
 hex = { workspace = true }
