@@ -66,6 +66,9 @@ pub trait Indexer: Sized {
     /// Indexer config struct
     type Config;
 
+    /// Indexer listen port
+    fn listen_port(&self) -> Port;
+
     /// Launch the process.
     fn launch(config: Self::Config) -> Result<Self, LaunchError>;
 
@@ -116,6 +119,10 @@ impl Indexer for Zainod {
     const CONFIG_FILENAME: &str = config::ZAINOD_FILENAME;
 
     type Config = ZainodConfig;
+
+    fn listen_port(&self) -> Port {
+        self.port
+    }
 
     fn launch(config: Self::Config) -> Result<Self, LaunchError> {
         let logs_dir = tempfile::tempdir().unwrap();
@@ -222,6 +229,10 @@ impl Indexer for Lightwalletd {
 
     type Config = LightwalletdConfig;
 
+    fn listen_port(&self) -> Port {
+        self.port
+    }
+
     fn launch(config: Self::Config) -> Result<Self, LaunchError> {
         let logs_dir = tempfile::tempdir().unwrap();
         let lwd_log_file_path = logs_dir.path().join(logs::LIGHTWALLETD_LOG);
@@ -315,6 +326,10 @@ impl Indexer for Empty {
     const CONFIG_FILENAME: &str = "";
 
     type Config = EmptyConfig;
+
+    fn listen_port(&self) -> Port {
+        0
+    }
 
     fn launch(_config: Self::Config) -> Result<Self, LaunchError> {
         let logs_dir = tempfile::tempdir().unwrap();
