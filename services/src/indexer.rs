@@ -265,6 +265,7 @@ impl Indexer for Lightwalletd {
                 config.zcashd_conf.to_str().unwrap(),
                 "--config",
                 config_file_path.to_str().unwrap(),
+                "--darkside-very-insecure",
             ])
             .stdout(std::process::Stdio::piped())
             .stderr(std::process::Stdio::piped());
