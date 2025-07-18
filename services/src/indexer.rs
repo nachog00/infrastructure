@@ -51,6 +51,8 @@ pub struct LightwalletdConfig {
     pub listen_port: Option<Port>,
     /// Zcashd configuration file location. Required even when running non-Zcashd validators.
     pub zcashd_conf: PathBuf,
+    /// Enables darkside
+    pub darkside: bool,
 }
 
 /// Empty configuration
@@ -254,19 +256,23 @@ impl Indexer for Lightwalletd {
             Some(path) => std::process::Command::new(path),
             None => std::process::Command::new("lightwalletd"),
         };
+        let mut args = vec![
+            "--no-tls-very-insecure",
+            "--data-dir",
+            data_dir.path().to_str().unwrap(),
+            "--log-file",
+            lwd_log_file_path.to_str().unwrap(),
+            "--zcash-conf-path",
+            config.zcashd_conf.to_str().unwrap(),
+            "--config",
+            config_file_path.to_str().unwrap(),
+        ];
+        if config.darkside {
+            args.push("--darkside-very-insecure");
+        }
+
         command
-            .args([
-                "--no-tls-very-insecure",
-                "--data-dir",
-                data_dir.path().to_str().unwrap(),
-                "--log-file",
-                lwd_log_file_path.to_str().unwrap(),
-                "--zcash-conf-path",
-                config.zcashd_conf.to_str().unwrap(),
-                "--config",
-                config_file_path.to_str().unwrap(),
-                "--darkside-very-insecure",
-            ])
+            .args(args)
             .stdout(std::process::Stdio::piped())
             .stderr(std::process::Stdio::piped());
 
