@@ -357,7 +357,7 @@ impl Validator for Zcashd {
 
     async fn poll_chain_height(&self, target_height: BlockHeight) {
         while self.get_chain_height().await < target_height {
-            std::thread::sleep(std::time::Duration::from_millis(100));
+            std::thread::sleep(std::time::Duration::from_millis(500));
         }
     }
 

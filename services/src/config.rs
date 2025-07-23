@@ -455,7 +455,7 @@ minetolocalwallet=0 # This is set to false so that we can mine to a wallet, othe
     fn zainod() {
         let config_dir = tempfile::tempdir().unwrap();
         let cache_dir = tempfile::tempdir().unwrap();
-        let zaino_cache_dir = cache_dir.into_path();
+        let zaino_cache_dir = cache_dir.path().to_path_buf();
         let zaino_test_dir = zaino_cache_dir.join("zaino");
         let zaino_test_path = zaino_test_dir.to_str().unwrap();
 
